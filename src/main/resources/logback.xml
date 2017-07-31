@@ -6,10 +6,10 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</pattern>
         </encoder>
     </appender>
-    <logger name="com.github.usmanovbf.logger" additivity="false" level="INFO">
+    <logger name="com.github.usmanovbf.logger" additivity="false" level="debug">
         <appender-ref ref="stdout"/>
     </logger>
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="stdout"/>
     </root>
 </configuration>

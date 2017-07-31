@@ -13,7 +13,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -27,7 +26,14 @@ import java.util.List;
 public class StackExchangeClient {
     private static final Logger LOGGER = LoggerFactory.getLogger( StackExchangeClient.class );
 
-    private String stackExchangeEndpoint = "http://api.stackexchange.com/2.2/";
+    @Value( "${i.o.exception.message}" )
+    private String I_O_EXCEPTION_MESSAGE;
+    @Value( "${client.protocol.exception.message}" )
+    private String CLIENT_PROTOCOL_EXCEPTION_MESSAGE;
+    @Value( "${stack.exchange.endpoint}" )
+    private String STACK_EXCHANGE_ENDPOINT ;
+    @Value( "${not.ok.http.status}" )
+    private String NOT_OK_HTTP_STATUS;
 
     public List<SearchResult> search( String subTitle ) {
         List<SearchResult> results = new ArrayList<>();
@@ -57,7 +63,7 @@ public class StackExchangeClient {
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
 
-            String url = stackExchangeEndpoint + "search?page=1&pagesize=20&order=desc&sort=creation&intitle=" + subTitle + "&site=stackoverflow";
+            String url = STACK_EXCHANGE_ENDPOINT + "search?page=1&pagesize=20&order=desc&sort=creation&intitle=" + subTitle + "&site=stackoverflow";
             HttpGet getRequest = new HttpGet(
                     url );
             getRequest.addHeader( "accept", "application/json" );
@@ -65,7 +71,7 @@ public class StackExchangeClient {
             HttpResponse response = httpClient.execute( getRequest );
 
             if (response.getStatusLine().getStatusCode() != 200) {
-                throw new RuntimeException( "Failed : HTTP error code : "
+                throw new RuntimeException( NOT_OK_HTTP_STATUS
                         + response.getStatusLine().getStatusCode() );
             }
 
@@ -83,9 +89,9 @@ public class StackExchangeClient {
             searchResponse = mapper.readValue( resultString.toString(), SearchResponse.class );
 
         } catch (ClientProtocolException e) {
-            LOGGER.error( "Error in the HTTP protocol while connecting to stackexhange.com" );
+            LOGGER.error( CLIENT_PROTOCOL_EXCEPTION_MESSAGE );
         } catch (IOException e) {
-            LOGGER.error( "I/O exception while reading response response" );
+            LOGGER.error( I_O_EXCEPTION_MESSAGE );
         }
         return searchResponse;
 

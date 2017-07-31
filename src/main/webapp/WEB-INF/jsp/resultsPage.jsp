@@ -16,11 +16,15 @@
         <th>Link</th>
     </tr>
     <c:forEach var="searchResult" items="${searchResults}">
-        <tr>
-            <td><c:out value="${searchResult.dateOfQuestion}" /></td>
-            <td><c:out value="${searchResult.title}" /></td>
-            <td><c:out value="${searchResult.username}" /></td>
-            <td><a href="<c:out value="${searchResult.link}" />">Link</a></td>
+        <tr
+        <c:if test="${searchResult.isAnswered()}">bgcolor="#C0D890"</c:if>
+        <c:if test="${!searchResult.isAnswered()}">bgcolor="#F09C82"</c:if>
+
+        >
+        <td><c:out value="${searchResult.dateOfQuestion}"/></td>
+        <td><c:out value="${searchResult.title}"/></td>
+        <td><c:out value="${searchResult.username}"/></td>
+        <td><a href="<c:out value="${searchResult.link}" />">Link</a></td>
         </tr>
     </c:forEach>
 </table>
