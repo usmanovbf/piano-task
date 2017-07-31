@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,16 +24,25 @@ public class SearchController {
     private SearchService searchService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView getSearch(Model model) {
-        LOGGER.info( "Received GET request for searching page" );
-        return new ModelAndView("searchPage", "form", new SearchForm());
+    public ModelAndView getSearch( Model model ) {
+        LOGGER.debug( "Received GET request for searching page" );
+        return new ModelAndView( "searchPage", "form", new SearchForm() );
     }
 
     @RequestMapping(value = "/results", method = RequestMethod.POST,
             consumes = "application/x-www-form-urlencoded", produces = "text/html")
     public ModelAndView search( @ModelAttribute("form") SearchForm form ) {
-        LOGGER.info( "Received POST request for searching" + form.getSearchTitle() );
+        LOGGER.debug( "Received POST request for searching" + form.getSearchTitle() );
         List<SearchResult> searchResults = searchService.search( form.getSearchTitle() );
+        return new ModelAndView( "resultsPage", "searchResults", searchResults );
+    }
+
+    @RequestMapping(value = "/results/{page}", method = RequestMethod.POST,
+            consumes = "application/x-www-form-urlencoded", produces = "text/html")
+    public ModelAndView searchOtherPages( @ModelAttribute("form") SearchForm form,
+                                          @PathVariable String page) {
+        LOGGER.debug( "Received POST request for searching" + form.getSearchTitle() );
+        List<SearchResult> searchResults = searchService.search( form.getSearchTitle(), page );
         return new ModelAndView( "resultsPage", "searchResults", searchResults );
     }
 }

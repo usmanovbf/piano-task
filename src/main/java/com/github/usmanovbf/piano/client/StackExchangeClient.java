@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,10 +36,12 @@ public class StackExchangeClient {
     @Value( "${not.ok.http.status}" )
     private String NOT_OK_HTTP_STATUS;
 
-    public List<SearchResult> search( String subTitle ) {
+
+
+    public List<SearchResult> search( String subTitle, String page, String size ) {
         List<SearchResult> results = new ArrayList<>();
 
-        SearchResponse searchResponse = receiveResponse( subTitle );
+        SearchResponse searchResponse = receiveResponse( subTitle, page, size );
         for (Item item : searchResponse.getItems()) {
             SearchResult searchResult = new SearchResult();
 
@@ -58,15 +61,19 @@ public class StackExchangeClient {
         return results;
     }
 
-    private SearchResponse receiveResponse( String subTitle ) {
+    private SearchResponse receiveResponse( String subTitle, String page, String size ) {
         SearchResponse searchResponse = null;
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
 
-            String url = STACK_EXCHANGE_ENDPOINT + "search?page=1&pagesize=20&order=desc&sort=creation&intitle=" + subTitle + "&site=stackoverflow";
+            String url = new StringBuilder().append( STACK_EXCHANGE_ENDPOINT )
+                    .append( "search?page=" ).append( page )
+                    .append( "&pagesize=" ).append( size )
+                    .append( "&order=desc&sort=creation&intitle=" ).append( subTitle )
+                    .append( "&site=stackoverflow" ).toString();
             HttpGet getRequest = new HttpGet(
                     url );
-            getRequest.addHeader( "accept", "application/json" );
+            getRequest.addHeader( "accept", MediaType.APPLICATION_JSON );
 
             HttpResponse response = httpClient.execute( getRequest );
 
