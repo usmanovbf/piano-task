@@ -2,6 +2,9 @@ package com.github.usmanovbf.piano.domain;
 
 import java.util.Date;
 
+/**
+ * Each item from /search method of API
+ */
 public class SearchResult {
     private Date dateOfQuestion;
     private String title;

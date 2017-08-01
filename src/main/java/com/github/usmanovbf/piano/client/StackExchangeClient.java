@@ -20,14 +20,18 @@ import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+/**
+ * Client for search method of stackexchange.com
+ */
 @Component
 public class StackExchangeClient {
     private static final Logger LOGGER = LoggerFactory.getLogger( StackExchangeClient.class );
 
+    /**
+     * These values extracted from .property files
+     */
     @Value("${i.o.exception.message}")
     private String I_O_EXCEPTION_MESSAGE;
     @Value("${client.protocol.exception.message}")

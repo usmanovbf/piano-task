@@ -2,12 +2,14 @@
 package com.github.usmanovbf.piano.domain.json;
 
 import com.fasterxml.jackson.annotation.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Data Transfer Object corresponds to JSON response from /search
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "items"

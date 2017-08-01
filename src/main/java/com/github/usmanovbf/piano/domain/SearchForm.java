@@ -2,7 +2,6 @@ package com.github.usmanovbf.piano.domain;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
 
 
 public class SearchForm {

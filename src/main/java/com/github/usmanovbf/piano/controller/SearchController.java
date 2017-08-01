@@ -43,7 +43,8 @@ public class SearchController {
     @RequestMapping(value = "/results/{page}", method = RequestMethod.POST,
             consumes = "application/x-www-form-urlencoded", produces = "text/html")
     public ModelAndView searchOtherPages( @ModelAttribute("form") @Valid SearchForm form,
-                                          @PathVariable @NotBlank @Pattern(regexp = "[\\d]+", message = "Page must be digital") String page ) {
+                                          @PathVariable @NotBlank
+                                          @Pattern(regexp = "[\\d]+", message = "Page must be digital") String page ) {
         String searchTitle = form.getSearchTitle();
         LOGGER.debug( "Received POST request for searching" + searchTitle );
         ResultsResponse resultsResponse = searchService.search( searchTitle, page );

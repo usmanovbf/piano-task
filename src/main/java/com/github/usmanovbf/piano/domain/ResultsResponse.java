@@ -3,6 +3,10 @@ package com.github.usmanovbf.piano.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Data Transfer Object for UI on results page
+ */
 public class ResultsResponse {
     private Integer currentPage;
     private String searchTitle;
