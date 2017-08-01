@@ -1,15 +1,14 @@
 package com.github.usmanovbf.piano.service;
 
 
-import com.github.usmanovbf.piano.domain.SearchResult;
-
-import java.util.List;
+import com.github.usmanovbf.piano.domain.ResultsResponse;
 
 public interface SearchService {
-    List<SearchResult> search( String subTitle );
+    ResultsResponse search( String subTitle );
 
 
-    List<SearchResult> search( String subTitle, String page, String size );
+    ResultsResponse search( String subTitle, String page, String size );
 
-    List<SearchResult> search( String searchTitle, String page );
+    ResultsResponse search( String searchTitle, String page );
+
 }

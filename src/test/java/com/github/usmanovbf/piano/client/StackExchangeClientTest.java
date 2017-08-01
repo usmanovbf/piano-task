@@ -1,5 +1,6 @@
 package com.github.usmanovbf.piano.client;
 
+import com.github.usmanovbf.piano.domain.ResultsResponse;
 import com.github.usmanovbf.piano.domain.SearchResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,14 +22,14 @@ public class StackExchangeClientTest {
 
     @Test
     public void searchFrom1To20() throws Exception {
-        List<SearchResult> results = client.search( "java", "1", "20" );
-        assertTrue( results.size() > 1 );
+        ResultsResponse results = client.search( "java", "1", "20" );
+        assertTrue( results.getSearchResults().size() > 1 );
     }
 
     @Test
     public void searchFrom21To40() throws Exception {
-        List<SearchResult> results = client.search( "java", "2", "20" );
-        assertTrue( results.size() > 1 );
+        ResultsResponse results = client.search( "java", "2", "20" );
+        assertTrue( results.getSearchResults().size() > 1 );
     }
 
 }

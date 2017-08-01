@@ -2,6 +2,7 @@ package com.github.usmanovbf.piano.client;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.usmanovbf.piano.domain.ResultsResponse;
 import com.github.usmanovbf.piano.domain.SearchResult;
 import com.github.usmanovbf.piano.domain.json.Item;
 import com.github.usmanovbf.piano.domain.json.SearchResponse;
@@ -27,21 +28,22 @@ import java.util.List;
 public class StackExchangeClient {
     private static final Logger LOGGER = LoggerFactory.getLogger( StackExchangeClient.class );
 
-    @Value( "${i.o.exception.message}" )
+    @Value("${i.o.exception.message}")
     private String I_O_EXCEPTION_MESSAGE;
-    @Value( "${client.protocol.exception.message}" )
+    @Value("${client.protocol.exception.message}")
     private String CLIENT_PROTOCOL_EXCEPTION_MESSAGE;
-    @Value( "${stack.exchange.endpoint}" )
-    private String STACK_EXCHANGE_ENDPOINT ;
-    @Value( "${not.ok.http.status}" )
+    @Value("${stack.exchange.endpoint}")
+    private String STACK_EXCHANGE_ENDPOINT;
+    @Value("${not.ok.http.status}")
     private String NOT_OK_HTTP_STATUS;
 
 
+    public ResultsResponse search( String subTitle, String page, String size ) {
 
-    public List<SearchResult> search( String subTitle, String page, String size ) {
-        List<SearchResult> results = new ArrayList<>();
 
         SearchResponse searchResponse = receiveResponse( subTitle, page, size );
+
+        ResultsResponse response = new ResultsResponse();
         for (Item item : searchResponse.getItems()) {
             SearchResult searchResult = new SearchResult();
 
@@ -55,14 +57,16 @@ public class StackExchangeClient {
             searchResult.setLink( item.getLink() );
 
             searchResult.setAnswered( item.getIsAnswered() );
-            results.add( searchResult );
+            response.getSearchResults().add( searchResult );
         }
 
-        return results;
+        response.setHasMore( searchResponse.getHasMore() );
+
+        return response;
     }
 
     private SearchResponse receiveResponse( String subTitle, String page, String size ) {
-        SearchResponse searchResponse = null;
+        SearchResponse searchResponse;
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
 
@@ -78,8 +82,11 @@ public class StackExchangeClient {
             HttpResponse response = httpClient.execute( getRequest );
 
             if (response.getStatusLine().getStatusCode() != 200) {
-                throw new RuntimeException( NOT_OK_HTTP_STATUS
-                        + response.getStatusLine().getStatusCode() );
+                String message = NOT_OK_HTTP_STATUS
+                        + response.getStatusLine().getStatusCode();
+
+                LOGGER.error( message );
+                throw new RuntimeException( message );
             }
 
             BufferedReader br = new BufferedReader(
@@ -97,8 +104,10 @@ public class StackExchangeClient {
 
         } catch (ClientProtocolException e) {
             LOGGER.error( CLIENT_PROTOCOL_EXCEPTION_MESSAGE );
+            throw new RuntimeException( CLIENT_PROTOCOL_EXCEPTION_MESSAGE );
         } catch (IOException e) {
             LOGGER.error( I_O_EXCEPTION_MESSAGE );
+            throw new RuntimeException( I_O_EXCEPTION_MESSAGE );
         }
         return searchResponse;
 

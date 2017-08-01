@@ -52,4 +52,5 @@ public class SearchResult {
     public void setAnswered( boolean answered ) {
         isAnswered = answered;
     }
+
 }

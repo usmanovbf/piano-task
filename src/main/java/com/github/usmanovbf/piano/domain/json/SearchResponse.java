@@ -2,6 +2,7 @@
 package com.github.usmanovbf.piano.domain.json;
 
 import com.fasterxml.jackson.annotation.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,8 @@ public class SearchResponse {
 
     @JsonProperty("items")
     private List<Item> items = null;
+    @JsonProperty("has_more")
+    private Boolean hasMore;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -38,4 +41,11 @@ public class SearchResponse {
         this.additionalProperties.put(name, value);
     }
 
+    public Boolean getHasMore() {
+        return hasMore;
+    }
+
+    public void setHasMore( Boolean hasMore ) {
+        this.hasMore = hasMore;
+    }
 }
