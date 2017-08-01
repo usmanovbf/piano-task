@@ -20,9 +20,15 @@ public class StackExchangeClientTest {
     private StackExchangeClient client;
 
     @Test
-    public void search() throws Exception {
+    public void searchFrom1To20() throws Exception {
         List<SearchResult> results = client.search( "java", "1", "20" );
-        assertTrue( results .size()>1);
+        assertTrue( results.size() > 1 );
+    }
+
+    @Test
+    public void searchFrom21To40() throws Exception {
+        List<SearchResult> results = client.search( "java", "2", "20" );
+        assertTrue( results.size() > 1 );
     }
 
 }
